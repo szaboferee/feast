@@ -95,6 +95,7 @@ public class ApplicationProperties {
     private String gcpProject;
     private String awsRegion;
     private String transformationServiceEndpoint;
+    private String azureStorageAccount;
 
     public String getRegistry() {
       return registry;
@@ -140,7 +141,7 @@ public class ApplicationProperties {
         }
       }
       throw new RuntimeException(
-          String.format("Active store is misconfigured. Could not find store: %s.", activeStore));
+              String.format("Active store is misconfigured. Could not find store: %s.", activeStore));
     }
 
     public void setActiveStore(String activeStore) {
@@ -204,6 +205,14 @@ public class ApplicationProperties {
 
     public void setTransformationServiceEndpoint(String transformationServiceEndpoint) {
       this.transformationServiceEndpoint = transformationServiceEndpoint;
+    }
+
+    public String getAzureStorageAccount() {
+      return azureStorageAccount;
+    }
+
+    public void setAzureStorageAccount(String azureStorageAccount) {
+      this.azureStorageAccount = azureStorageAccount;
     }
   }
 
@@ -274,7 +283,7 @@ public class ApplicationProperties {
 
       if (!this.config.containsKey("timeout") || this.config.get("timeout") == null) {
         throw new IllegalArgumentException(
-            "Redis cluster config does not have 'timeout' specified");
+                "Redis cluster config does not have 'timeout' specified");
       }
 
       Boolean ssl = null;
@@ -286,19 +295,19 @@ public class ApplicationProperties {
       }
       Duration timeout = Duration.parse(this.config.get("timeout"));
       return new RedisClusterStoreConfig(
-          this.config.get("connection_string"),
-          ReadFrom.valueOf(read_from),
-          timeout,
-          ssl,
-          this.config.getOrDefault("password", ""));
+              this.config.get("connection_string"),
+              ReadFrom.valueOf(read_from),
+              timeout,
+              ssl,
+              this.config.getOrDefault("password", ""));
     }
 
     public RedisStoreConfig getRedisConfig() {
       return new RedisStoreConfig(
-          this.config.get("host"),
-          Integer.valueOf(this.config.get("port")),
-          Boolean.valueOf(this.config.getOrDefault("ssl", "false")),
-          this.config.getOrDefault("password", ""));
+              this.config.get("host"),
+              Integer.valueOf(this.config.get("port")),
+              Boolean.valueOf(this.config.getOrDefault("ssl", "false")),
+              this.config.getOrDefault("password", ""));
     }
 
     public void setConfig(Map<String, String> config) {
